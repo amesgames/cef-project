@@ -15,6 +15,7 @@ class Client : public CefClient,
                public CefLifeSpanHandler {
  public:
   Client();
+  virtual ~Client();
 
   // CefClient methods:
   CefRefPtr<CefDisplayHandler> GetDisplayHandler() override { return this; }

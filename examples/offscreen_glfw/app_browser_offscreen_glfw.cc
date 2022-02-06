@@ -7,16 +7,27 @@
 
 #include <GLFW/glfw3.h>
 
+#include <dlfcn.h>
+
 namespace offscreen_glfw {
 
 // Offscreen GLFW implementation of CefApp for the browser process.
 class BrowserApp : public CefApp, public CefBrowserProcessHandler {
  public:
   BrowserApp() {
+    LOG(INFO) << "BrowserApp::BrowserApp()";
+
     // Initialize GLFW
     CHECK(glfwInit());
+
+    // OpenGL core profile
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   }
   virtual ~BrowserApp() {
+    LOG(INFO) << "BrowserApp::~BrowserApp()";
+
     // Terminate GLFW
     glfwTerminate();
   }

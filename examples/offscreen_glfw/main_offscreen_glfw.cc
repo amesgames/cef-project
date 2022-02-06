@@ -19,13 +19,18 @@ using namespace offscreen_glfw;
 
 // For interacting with both the client and the browser from GLFW callbacks
 struct Context {
-  Context(const char *url)
-    : client{new Client()} {
+  Context(const char *url) {
+    LOG(INFO) << "Context::Context()";
+
+    client = new Client();
+
     // Information used when creating the native window.
     CefWindowInfo window_info;
 
     // Do not create an OS window.
     window_info.SetAsWindowless(0);
+
+    LOG(INFO) << "CefBrowserHost::CreateBrowserSync()";
 
     // Create the browser.
     browser = CefBrowserHost::CreateBrowserSync(window_info, client,
@@ -113,6 +118,7 @@ int main(int argc, char* argv[]) {
   // Initialize CEF for the browser process. The first browser instance will be
   // created in CefBrowserProcessHandler::OnContextInitialized() after CEF has
   // been initialized.
+  LOG(INFO) << "CefInitialize()";
   CefInitialize(main_args, settings, app, nullptr);
 
   // Create the context for both the client and browser.
@@ -123,7 +129,7 @@ int main(int argc, char* argv[]) {
 
   glfwSetFramebufferSizeCallback(context.client->getWindow(), glfwframebuffersizeCallback);
 
-  // Set clear color to red so we can tell if OpenGL is working
+  // Set clear color to red.
   glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
 
   // Loop until the user closes the window
@@ -131,8 +137,10 @@ int main(int argc, char* argv[]) {
   {
     CefDoMessageLoopWork();
 
-    // Render here
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    // Draw the browser to the window.
+    context.client->draw();
 
     // Swap front and back buffers
     glfwSwapBuffers(context.client->getWindow());
@@ -141,10 +149,18 @@ int main(int argc, char* argv[]) {
     glfwPollEvents();
   }
 
-  // context.browser->GetHost()->CloseBrowser(/*force_close=*/true);
-  // context.browser.reset();
+  // Run the CEF message loop. This will block until CefQuitMessageLoop() is
+  // called.
+  // LOG(INFO) << "CefRunMessageLoop()";
+  // CefRunMessageLoop();
+
+  context.browser->GetHost()->CloseBrowser(/*force_close=*/true);
+  context.browser.reset();
+
+  // CefDoMessageLoopWork();
 
   // Shut down CEF.
+  LOG(INFO) << "CefShutdown()";
   CefShutdown();
 
   return 0;

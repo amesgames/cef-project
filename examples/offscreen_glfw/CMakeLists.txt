@@ -9,6 +9,9 @@
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIRS})
 
+find_package(GLEW REQUIRED)
+include_directories(${GLEW_INCLUDE_DIRS})
+
 find_package(glfw3 REQUIRED)
 include_directories(${GLFW_INCLUDE_DIRS})
 
@@ -22,6 +25,7 @@ set(EXAMPLE_SRCS
   client_offscreen_glfw.cc
   client_offscreen_glfw.h
   main_offscreen_glfw.cc
+  glad/glad.cc
   )
 
 if(OS_LINUX OR OS_WINDOWS)
@@ -69,7 +73,7 @@ if(OS_LINUX)
   add_executable(${EXAMPLE_TARGET} ${EXAMPLE_SRCS})
   SET_EXAMPLE_EXECUTABLE_TARGET_PROPERTIES(${EXAMPLE_TARGET})
   add_dependencies(${EXAMPLE_TARGET} shared)
-  target_link_libraries(${EXAMPLE_TARGET} shared ${OPENGL_LIBRARIES} ${GLFW_STATIC_LIBRARIES})
+  target_link_libraries(${EXAMPLE_TARGET} shared ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${GLFW_STATIC_LIBRARIES})
 endif()
 
 
@@ -98,7 +102,7 @@ if(OS_MAC)
   add_executable(${EXAMPLE_TARGET} MACOSX_BUNDLE ${EXAMPLE_SRCS} ${EXAMPLE_RESOURCES_SRCS})
   SET_EXAMPLE_EXECUTABLE_TARGET_PROPERTIES(${EXAMPLE_TARGET})
   add_dependencies(${EXAMPLE_TARGET} shared)
-  target_link_libraries(${EXAMPLE_TARGET} shared ${OPENGL_LIBRARIES} ${GLFW_STATIC_LIBRARIES})
+  target_link_libraries(${EXAMPLE_TARGET} shared ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${GLFW_STATIC_LIBRARIES})
   set_target_properties(${EXAMPLE_TARGET} PROPERTIES
     RESOURCE "${EXAMPLE_RESOURCES_SRCS}"
     MACOSX_BUNDLE_INFO_PLIST "${CMAKE_CURRENT_SOURCE_DIR}/${SHARED_INFO_PLIST}"
@@ -194,5 +198,5 @@ if(OS_WINDOWS)
   add_executable(${EXAMPLE_TARGET} WIN32 ${EXAMPLE_SRCS})
   SET_EXAMPLE_EXECUTABLE_TARGET_PROPERTIES(${EXAMPLE_TARGET})
   add_dependencies(${EXAMPLE_TARGET} shared)
-  target_link_libraries(${EXAMPLE_TARGET} shared ${OPENGL_LIBRARIES} ${GLFW_STATIC_LIBRARIES})
+  target_link_libraries(${EXAMPLE_TARGET} shared ${OPENGL_LIBRARIES} ${GLEW_LIBRARIES} ${GLFW_STATIC_LIBRARIES})
 endif()

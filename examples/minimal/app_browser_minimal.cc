@@ -17,7 +17,12 @@ const char kStartupURL[] = "https://www.google.com";
 // Minimal implementation of CefApp for the browser process.
 class BrowserApp : public CefApp, public CefBrowserProcessHandler {
  public:
-  BrowserApp() {}
+  BrowserApp() {
+    LOG(INFO) << "BrowserApp::BrowserApp()";
+  }
+  virtual ~BrowserApp() {
+    LOG(INFO) << "BrowserApp::~BrowserApp()";
+  }
 
   // CefApp methods:
   CefRefPtr<CefBrowserProcessHandler> GetBrowserProcessHandler() override {
@@ -27,6 +32,8 @@ class BrowserApp : public CefApp, public CefBrowserProcessHandler {
   void OnBeforeCommandLineProcessing(
       const CefString& process_type,
       CefRefPtr<CefCommandLine> command_line) override {
+    LOG(INFO) << "BrowserApp::OnBeforeCommandLineProcessing()";
+
     // Command-line flags can be modified in this callback.
     // |process_type| is empty for the browser process.
     if (process_type.empty()) {
@@ -39,6 +46,8 @@ class BrowserApp : public CefApp, public CefBrowserProcessHandler {
 
   // CefBrowserProcessHandler methods:
   void OnContextInitialized() override {
+    LOG(INFO) << "BrowserApp::OnContextInitialized()";
+
     // Create the browser window.
     shared::CreateBrowser(new Client(), kStartupURL, CefBrowserSettings());
   }

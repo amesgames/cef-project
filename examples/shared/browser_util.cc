@@ -65,6 +65,8 @@ void CreateBrowser(CefRefPtr<CefClient> client,
                    const CefBrowserSettings& settings) {
   CEF_REQUIRE_UI_THREAD();
 
+  LOG(INFO) << "shared::CreateBrowser()";
+
 #if defined(OS_WIN) || defined(OS_LINUX)
   CefRefPtr<CefCommandLine> command_line =
       CefCommandLine::GetGlobalCommandLine();
@@ -94,6 +96,8 @@ void CreateBrowser(CefRefPtr<CefClient> client,
     // CreateWindowEx().
     window_info.SetAsPopup(nullptr, "examples");
 #endif
+
+    LOG(INFO) << "CefBrowserHost::CreateBrowser()";
 
     // Create the browser window.
     CefBrowserHost::CreateBrowser(window_info, client, startup_url, settings,

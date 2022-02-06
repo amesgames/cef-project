@@ -78,13 +78,16 @@ int main(int argc, char* argv[]) {
   // Initialize CEF for the browser process. The first browser instance will be
   // created in CefBrowserProcessHandler::OnContextInitialized() after CEF has
   // been initialized.
+  LOG(INFO) << "CefInitialize()";
   CefInitialize(main_args, settings, app, nullptr);
 
   // Run the CEF message loop. This will block until CefQuitMessageLoop() is
   // called.
+  LOG(INFO) << "CefRunMessageLoop()";
   CefRunMessageLoop();
 
   // Shut down CEF.
+  LOG(INFO) << "CefShutdown()";
   CefShutdown();
 
   return 0;

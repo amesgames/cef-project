@@ -18,7 +18,7 @@ class Client : public CefClient,
                public CefRenderHandler {
  public:
   Client();
-  virtual ~Client() = default;
+  virtual ~Client();
 
   // CefClient methods:
   CefRefPtr<CefDisplayHandler> GetDisplayHandler() override { return this; }
@@ -51,6 +51,7 @@ class Client : public CefClient,
     width = w;
     height = h;
   }
+  void draw();
 
  private:
   IMPLEMENT_REFCOUNTING(Client);
@@ -63,6 +64,12 @@ class Client : public CefClient,
   std::unique_ptr<GLFWwindow, WindowDeleter> window;
   int width;
   int height;
+
+  GLuint program;
+  GLuint vao;
+  GLuint vbo;
+  GLuint texture;
+  GLuint positionLoc;
 };
 
 }  // namespace offscreen_glfw
