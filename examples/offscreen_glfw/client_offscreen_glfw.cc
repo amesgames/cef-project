@@ -58,6 +58,7 @@ Client::Client() {
 
   // During init, enable debug output
   glEnable(GL_DEBUG_OUTPUT);
+  glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
   glDebugMessageCallback(MessageCallback, 0);
 
   glGenTextures(1, &texture);

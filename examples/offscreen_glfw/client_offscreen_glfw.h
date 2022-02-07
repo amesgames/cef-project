@@ -51,6 +51,14 @@ class Client : public CefClient,
     width = w;
     height = h;
   }
+  void mouse(int x, int y) {
+    mouseX = x;
+    mouseY = y;
+  }
+  void getMouse(int *x, int *y) const {
+    *x = mouseX;
+    *y = mouseY;
+  }
   void draw();
 
  private:
@@ -64,6 +72,8 @@ class Client : public CefClient,
   std::unique_ptr<GLFWwindow, WindowDeleter> window;
   int width;
   int height;
+  int mouseX;
+  int mouseY;
 
   GLuint program;
   GLuint vao;
